@@ -2,7 +2,7 @@
 kw
 ==
 
-This is the default description, please change it.
+kw is a tiny library which enables the use of keyword arguments in c++.
 
 .. contents:: Table of Contents:
    :local:

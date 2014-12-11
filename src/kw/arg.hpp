@@ -13,9 +13,9 @@
 namespace kw
 {
     template<class Value>
-    struct kwarg
+    struct arg
     {
-        kwarg()
+        arg()
         { }
 
         template<class Arg>
@@ -26,28 +26,28 @@ namespace kw
     };
 
     template<class Key, class Value, class Parameter, class... Args>
-    void kwget(
-        const kwarg<Key>& key,
+    void get(
+        const arg<Key>& key,
         Value& value,
         const parameter<Parameter>& param,
         const Args&... args)
     {
         if (&key == param.key)
             copy<Parameter, Value>()(param.value, value);
-        kwget(key, value, args...);
+        get(key, value, args...);
     }
 
     template<class Key, class Value, class... Args>
-    void kwget(
-        const kwarg<Key>& key,
+    void get(
+        const arg<Key>& key,
         Value& value,
-        const kwarg<bool>& param,
+        const arg<bool>& param,
         const Args&... args)
     {
-        kwget(key, value, param = true, args...);
+        get(key, value, param = true, args...);
     }
 
     template <class Key, class Value>
-    void kwget(const kwarg<Key>&, Value&)
+    void get(const arg<Key>&, Value&)
     { }
 }
