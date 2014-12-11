@@ -1,0 +1,7 @@
+# encoding: utf-8
+
+bld.program(
+    features='cxx test',
+    source=['kw_tests.cpp'] + bld.path.ant_glob('src/*.cpp'),
+    target='kw_tests',
+    use=['kw_includes', 'gtest'])

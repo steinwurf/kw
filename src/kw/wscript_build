@@ -1,0 +1,7 @@
+# encoding: utf-8
+
+bld(
+    name='kw_includes',
+    export_includes=['..'],
+    use=[]
+)
