@@ -5,3 +5,11 @@
 
 #include <kw/parameter.hpp>
 #include <gtest/gtest.h>
+
+TEST(test_parameter, test)
+{
+    kw::parameter<uint32_t> param;
+    param.value = 42U;
+
+    EXPECT_EQ(42U, param.value);
+}
