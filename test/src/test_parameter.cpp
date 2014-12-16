@@ -4,6 +4,9 @@
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <kw/parameter.hpp>
+
+#include <cstdint>
+
 #include <gtest/gtest.h>
 
 TEST(test_parameter, test)

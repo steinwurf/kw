@@ -4,6 +4,10 @@
 // Distributed under the "BSD License". See the accompanying LICENSE.rst file.
 
 #include <kw/copy.hpp>
+
+#include <cstdint>
+#include <string>
+
 #include <gtest/gtest.h>
 
 TEST(test_copy, test)
