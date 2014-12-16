@@ -51,5 +51,3 @@ namespace kw
     void get(const arg<Key>&, Value&)
     { }
 }
-
-// test
