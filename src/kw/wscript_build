@@ -2,11 +2,11 @@
 
 from waflib import Context
 
+VERSION = Context.g_module.VERSION
+
 bld(
     name='kw_includes',
     export_includes=['..'],
-    export_defines=[
-        'STEINWURF_{}_VERSION="{}"'.format(
-            Context.g_module.APPNAME.upper(), Context.g_module.VERSION)],
+    export_defines=['STEINWURF_KW_VERSION="{}"'.format(VERSION)],
     use=[]
 )
