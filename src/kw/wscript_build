@@ -1,7 +1,12 @@
 # encoding: utf-8
 
+from waflib import Context
+
+VERSION = Context.g_module.VERSION
+
 bld(
     name='kw_includes',
     export_includes=['..'],
+    export_defines=['STEINWURF_KW_VERSION="{}"'.format(VERSION)],
     use=[]
 )
