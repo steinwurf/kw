@@ -6,4 +6,8 @@ every change, see the Git log.
 
 Latest
 ------
-* Minor: Added version define.
+* tbd
+
+1.0.0
+-----
+* Major: Initial release.
