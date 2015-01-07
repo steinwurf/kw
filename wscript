@@ -61,4 +61,10 @@ def build(bld):
         # in a recurse call
         bld.recurse('test')
 
-    bld.recurse('src/kw')
+    bld(includes='src',
+        export_includes='src',
+        name='kw_includes')
+
+    bld.env.append_unique(
+        'DEFINES_STEINWURF_VERSION',
+        'STEINWURF_KW_VERSION="{}"'.format(VERSION))
