@@ -1,0 +1,8 @@
+# encoding: utf-8
+
+bld.program(
+    features='cxx',
+    source="box_example.cpp",
+    target='box_example',
+    use=['kw_includes']
+)
