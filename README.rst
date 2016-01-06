@@ -20,36 +20,53 @@ file.
 
 Let's create a 2D box class::
 
-  #include <kw/arg.hpp>
+    #include <kw/arg.hpp>
 
-  kw::arg<uint32_t> x, y, width, height;
-  kw::arg<std::string> name;
+    #include <string>
+    #include <cstdint>
+    #include <iostream>
 
-  class box
-  {
+    kw::arg<uint32_t> x, y, width, height;
+    kw::arg<std::string> name;
 
-  public:
-
-    template<class... Args>
-    void create_box(Args&... args)
+    class box
     {
-      // setup default values
-      uint32_t x_arg = 0;
-      uint32_t y_arg = 0;
-      uint32_t width_arg = 10;
-      uint32_t height_arg = 10;
-      std::string name_arg = "box";
 
-      // extract values
-      kw::get(x, x_arg, args...);
-      kw::get(y, y_arg, args...);
-      kw::get(width, width_arg, args...);
-      kw::get(height, height_arg, args...);
-      kw::get(name, name_arg, args...);
+    public:
 
-      // use parameters to create box...
-    }
-  }
+        template<class... Args>
+        box(const Args&... args):
+            m_name("box"),
+            m_x(0U),
+            m_y(0U),
+            m_width(10U),
+            m_height(10U)
+        {
+            // extract values
+            kw::get(name, m_name, args...);
+            kw::get(x, m_x, args...);
+            kw::get(y, m_y, args...);
+            kw::get(width, m_width, args...);
+            kw::get(height, m_height, args...);
+        }
+
+        void print() const
+        {
+            std::cout << "name:   " << m_name << std::endl;
+            std::cout << "x:      " << m_x << std::endl;
+            std::cout << "y:      " << m_y << std::endl;
+            std::cout << "width:  " << m_width << std::endl;
+            std::cout << "height: " << m_height << std::endl;
+        }
+
+    private:
+
+        std::string m_name;
+        uint32_t m_x;
+        uint32_t m_y;
+        uint32_t m_width;
+        uint32_t m_height;
+    };
 
 We can now create a box by specifying all the values::
 
@@ -59,9 +76,12 @@ And we can create a box by specifying none of the values::
 
     auto my_other_box = box();
 
-Finally we can also create a box while only specifying the name::
+Finally we can also create a box while only specifying a subset of the values,
+e.g. the name::
 
     auto my_named_box = box(name="almost a standard box");
+
+You can find this example in the examples folder.
 
 License
 =======
