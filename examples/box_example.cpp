@@ -20,12 +20,7 @@ namespace
     public:
 
         template<class... Args>
-        box(const Args&... args):
-            m_name("box"),
-            m_x(0U),
-            m_y(0U),
-            m_width(10U),
-            m_height(10U)
+        box(const Args&... args)
         {
             // extract values
             kw::get(name, m_name, args...);
@@ -46,11 +41,11 @@ namespace
 
     private:
 
-        std::string m_name;
-        uint32_t m_x;
-        uint32_t m_y;
-        uint32_t m_width;
-        uint32_t m_height;
+        std::string m_name = "box";
+        uint32_t m_x = 0;
+        uint32_t m_y = 0;
+        uint32_t m_width = 10;
+        uint32_t m_height = 10;
     };
 }
 
