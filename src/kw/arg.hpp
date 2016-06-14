@@ -16,7 +16,7 @@ namespace kw
     struct arg
     {
         arg()
-        {}
+        { }
 
         template<class Arg>
         parameter<Value> operator=(const Arg& argument) const
