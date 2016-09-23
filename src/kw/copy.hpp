@@ -9,10 +9,12 @@
 
 namespace kw
 {
-    template<
+    template
+    <
         class Source,
         class Destination,
-        bool = std::is_convertible<Source, Destination>::value>
+        bool = std::is_convertible<Source, Destination>::value
+    >
     struct copy
     {
         void operator()(const Source& source, Destination& destination) const
@@ -21,9 +23,11 @@ namespace kw
         }
     };
 
-    template<
+    template
+    <
         class Source,
-        class Destination>
+        class Destination
+    >
     struct copy<Source, Destination, false>
     {
         void operator()(const Source& source, Destination& destination) const
