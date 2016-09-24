@@ -14,24 +14,24 @@
 namespace
 {
 
-    const kw::arg<uint32_t> alpha;
-    const kw::arg<bool> bravo;
-    const kw::arg<std::string> charlie;
+const kw::arg<uint32_t> alpha;
+const kw::arg<bool> bravo;
+const kw::arg<std::string> charlie;
 
-    template<class... Args>
-    std::tuple<uint32_t, bool, std::string> test_function(const Args&... args)
-    {
-        // defaults
-        uint32_t a = 0;
-        bool b = false;
-        std::string c = "";
+template<class... Args>
+std::tuple<uint32_t, bool, std::string> test_function(const Args&... args)
+{
+    // defaults
+    uint32_t a = 0;
+    bool b = false;
+    std::string c = "";
 
-        kw::get(alpha, a, args...);
-        kw::get(bravo, b, args...);
-        kw::get(charlie, c, args...);
-        auto result = std::make_tuple(a, b, c);
-        return result;
-    }
+    kw::get(alpha, a, args...);
+    kw::get(bravo, b, args...);
+    kw::get(charlie, c, args...);
+    auto result = std::make_tuple(a, b, c);
+    return result;
+}
 }
 
 TEST(test_arg, no_arguments)

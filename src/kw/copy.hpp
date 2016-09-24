@@ -9,27 +9,31 @@
 
 namespace kw
 {
-    template<
-        class Source,
-        class Destination,
-        bool = std::is_convertible<Source, Destination>::value>
-    struct copy
+template
+<
+    class Source,
+    class Destination,
+    bool = std::is_convertible<Source, Destination>::value
+>
+struct copy
+{
+    void operator()(const Source& source, Destination& destination) const
     {
-        void operator()(const Source& source, Destination& destination) const
-        {
-            destination = source;
-        }
-    };
+        destination = source;
+    }
+};
 
-    template<
-        class Source,
-        class Destination>
-    struct copy<Source, Destination, false>
+template
+<
+    class Source,
+    class Destination
+>
+struct copy<Source, Destination, false>
+{
+    void operator()(const Source& source, Destination& destination) const
     {
-        void operator()(const Source& source, Destination& destination) const
-        {
-            (void) source;
-            (void) destination;
-        }
-    };
+        (void) source;
+        (void) destination;
+    }
+};
 }
