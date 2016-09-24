@@ -9,10 +9,10 @@
 
 namespace kw
 {
-    template <class Value>
-    struct parameter
-    {
-        const void* key;
-        Value value;
-    };
+template <class Value>
+struct parameter
+{
+    const void* key;
+    Value value;
+};
 }

@@ -11,42 +11,42 @@
 
 namespace
 {
-    kw::arg<uint32_t> x, y, width, height;
-    kw::arg<std::string> name;
+kw::arg<uint32_t> x, y, width, height;
+kw::arg<std::string> name;
 
-    class box
+class box
+{
+
+public:
+
+    template<class... Args>
+    box(const Args&... args)
     {
+        // extract values
+        kw::get(name, m_name, args...);
+        kw::get(x, m_x, args...);
+        kw::get(y, m_y, args...);
+        kw::get(width, m_width, args...);
+        kw::get(height, m_height, args...);
+    }
 
-    public:
+    void print()
+    {
+        std::cout << "name:   " << m_name << std::endl;
+        std::cout << "x:      " << m_x << std::endl;
+        std::cout << "y:      " << m_y << std::endl;
+        std::cout << "width:  " << m_width << std::endl;
+        std::cout << "height: " << m_height << std::endl;
+    }
 
-        template<class... Args>
-        box(const Args&... args)
-        {
-            // extract values
-            kw::get(name, m_name, args...);
-            kw::get(x, m_x, args...);
-            kw::get(y, m_y, args...);
-            kw::get(width, m_width, args...);
-            kw::get(height, m_height, args...);
-        }
+private:
 
-        void print()
-        {
-            std::cout << "name:   " << m_name << std::endl;
-            std::cout << "x:      " << m_x << std::endl;
-            std::cout << "y:      " << m_y << std::endl;
-            std::cout << "width:  " << m_width << std::endl;
-            std::cout << "height: " << m_height << std::endl;
-        }
-
-    private:
-
-        std::string m_name = "box";
-        uint32_t m_x = 0;
-        uint32_t m_y = 0;
-        uint32_t m_width = 10;
-        uint32_t m_height = 10;
-    };
+    std::string m_name = "box";
+    uint32_t m_x = 0;
+    uint32_t m_y = 0;
+    uint32_t m_width = 10;
+    uint32_t m_height = 10;
+};
 }
 
 int main()
