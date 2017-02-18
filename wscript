@@ -4,42 +4,36 @@
 APPNAME = 'kw'
 VERSION = '2.0.0'
 
-import waflib.extras.wurf_options
-
-
-def options(opt):
-
-    opt.load('wurf_common_tools')
-
-
 def resolve(ctx):
 
-    import waflib.extras.wurf_dependency_resolve as resolve
-
-    ctx.load('wurf_common_tools')
-
-    ctx.add_dependency(resolve.ResolveVersion(
+    ctx.add_dependency(
         name='waf-tools',
-        git_repository='github.com/steinwurf/waf-tools.git',
-        major=3))
+        recurse=True,
+        optional=False,
+        resolver='git',
+        method='semver',
+        major=3,
+        sources=['github.com/steinwurf/waf-tools.git'])
 
     # Internal dependencies
     if ctx.is_toplevel():
 
-        ctx.add_dependency(resolve.ResolveVersion(
+        ctx.add_dependency(
             name='gtest',
-            git_repository='github.com/steinwurf/gtest.git',
-            major=3))
+            recurse=True,
+            optional=False,
+            resolver='git',
+            method='semver',
+            major=3,
+            sources=['github.com/steinwurf/gtest.git'])
 
 
 def configure(conf):
-
-    conf.load("wurf_common_tools")
+    print("kw configure")
 
 
 def build(bld):
-
-    bld.load("wurf_common_tools")
+    print("kw build")
 
     bld.env.append_unique(
         'DEFINES_STEINWURF_VERSION',
