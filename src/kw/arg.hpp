@@ -19,9 +19,9 @@ struct arg
     { }
 
     template<class Arg>
-    parameter<Value> operator=(const Arg& argument) const
+    parameter<Value> operator=(Arg&& argument) const
     {
-        return {this, argument};
+        return {this, std::forward<Arg>(argument)};
     }
 };
 
@@ -32,8 +32,8 @@ void get(
     const parameter<Parameter>& param,
     const Args&... args)
 {
-    if (&key == param.key)
-        copy<Parameter, Value>()(param.value, value);
+    if (&key == std::get<0>(param))
+        copy<Parameter, Value>()(std::get<1>(param), value);
     get(key, value, args...);
 }
 
@@ -50,4 +50,21 @@ void get(
 template <class Key, class Value>
 void get(const arg<Key>&, Value&)
 { }
+
+template<class Key, class Parameter, class... Args>
+void get_r(
+    const arg<Key>& key,
+    Value& value,
+    const parameter<Parameter>& param,
+    const Args&... args)
+{
+    if (&key == std::get<0>(param))
+        copy<Parameter, Value>()(std::get<1>(param), value);
+    get(key, value, args...);
+}
+
+template <class Key>
+void get_r(const arg<Key>&, Value&)
+{ }
+
 }

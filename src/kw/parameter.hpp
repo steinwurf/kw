@@ -5,14 +5,10 @@
 
 #pragma once
 
-#include <type_traits>
+#include <tuple>
 
 namespace kw
 {
-template <class Value>
-struct parameter
-{
-    const void* key;
-    Value value;
-};
+template<class Value>
+using parameter = std::tuple<const void*, Value>;
 }
