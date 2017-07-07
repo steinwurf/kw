@@ -28,6 +28,8 @@ public:
         kw::get(y, m_y, args...);
         kw::get(width, m_width, args...);
         kw::get(height, m_height, args...);
+
+        m_x = kw::get_r(x, args...);
     }
 
     void print()
@@ -67,4 +69,7 @@ int main()
     auto my_named_box = box(name="almost a standard box");
     std::cout << "printing my_named_box:" << std::endl;
     my_named_box.print();
+
+
+
 }

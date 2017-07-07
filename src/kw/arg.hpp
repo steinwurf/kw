@@ -51,20 +51,28 @@ template <class Key, class Value>
 void get(const arg<Key>&, Value&)
 { }
 
-template<class Key, class Parameter, class... Args>
-void get_r(
-    const arg<Key>& key,
-    Value& value,
-    const parameter<Parameter>& param,
-    const Args&... args)
+
+/// This is the kind of functionality I need:
+/// https://stackoverflow.com/q/36747123
+
+template<class Value, class... Parameters>
+Value get_r(
+    const arg<Value>& key,
+    const Parameters&... parameters)
 {
-    if (&key == std::get<0>(param))
-        copy<Parameter, Value>()(std::get<1>(param), value);
-    get(key, value, args...);
+
+
+    auto convertible = std::tuple_cat(
+        std::get<std::is_convertible<decltype(std::get<1>(parameters)), Value>::value ? 0 : 1>(
+            std::make_tuple(std::tuple<>(), parameters))...);
+
+    //
+    // auto convertible = std::tuple_cat(
+    //     std::get<std::is_convertible<Value, std::get<1>(parameters)>::value ? 0 : 1>(
+    //         std::make_tuple(parame, std::tuple<>()))...);
+
+    return Value(0);
 }
 
-template <class Key>
-void get_r(const arg<Key>&, Value&)
-{ }
 
 }
