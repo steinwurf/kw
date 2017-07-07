@@ -13,5 +13,13 @@
         "method": "semver",
         "major": 4,
         "sources": ["github.com/steinwurf/gtest.git"]
+    },
+    {
+        "name": "cxx-prettyprint",
+        "internal": true,
+        "resolver": "git",
+        "method": "checkout",
+        "checkout": "master",
+        "sources": ["github.com/louisdx/cxx-prettyprint.git"]
     }
 ]

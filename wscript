@@ -17,6 +17,10 @@ def build(bld):
 
     if bld.is_toplevel():
 
+        bld(export_includes=bld.dependency_path('cxx-prettyprint'),
+            name='cxx-prettyprint')
+
+
         # Only build test when executed from the top-level wscript,
         # i.e. not when included as a dependency
         bld.recurse('test')

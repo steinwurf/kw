@@ -56,7 +56,7 @@ void get(const arg<Key>&, Value&)
 /// https://stackoverflow.com/q/36747123
 
 template<class Value, class... Parameters>
-Value get_r(
+auto get_r(
     const arg<Value>& key,
     const Parameters&... parameters)
 {
@@ -64,14 +64,14 @@ Value get_r(
 
     auto convertible = std::tuple_cat(
         std::get<std::is_convertible<decltype(std::get<1>(parameters)), Value>::value ? 0 : 1>(
-            std::make_tuple(std::tuple<>(), parameters))...);
+            std::make_tuple(parameters, std::tuple<>()))...);
 
     //
     // auto convertible = std::tuple_cat(
     //     std::get<std::is_convertible<Value, std::get<1>(parameters)>::value ? 0 : 1>(
     //         std::make_tuple(parame, std::tuple<>()))...);
 
-    return Value(0);
+    return convertible;
 }
 
 
