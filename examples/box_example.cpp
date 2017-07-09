@@ -71,7 +71,7 @@ int main()
 {
     uint8_t count = 0;
 
-    tests(count);
+    tests(x=10U);
 
     // We can now create a box by specifying all the values
     //auto my_box = box(x=10U, y=20U, width=44U, height=87U, name="cool box", counter=std::ref(count));
