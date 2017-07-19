@@ -5,10 +5,22 @@
 
 #pragma once
 
-#include <tuple>
+#include <utility>
+
+#include "argument.hpp"
 
 namespace kw
 {
 template<class Value>
-using parameter = std::tuple<const void*, Value>;
+struct parameter
+{
+    parameter()
+    { }
+
+    template<class Arg>
+    argument<Value> operator=(Arg&& argument) const
+    {
+        return {this, std::forward<Arg>(argument)};
+    }
+};
 }

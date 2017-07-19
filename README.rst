@@ -78,6 +78,36 @@ e.g. the name::
 
 You can find this example in the examples folder.
 
+Notes
+=====
+We need the parameters to have the same address:
+https://stackoverflow.com/a/27349508
+
+Terminology
+===========
+
+Argument and parameter
+----------------------
+
+Taken from the following stackoverflow answer:
+https://stackoverflow.com/a/156787
+
+So basically in the following example::
+
+    // a and b are the two parameters
+    uint32_t sum(uint32_t a, uint32_t b)
+    {
+    ...
+    }
+
+    int main()
+    {
+        // Here 4 is the argument for parameter a and 5 is the argument
+        // for the parameter b.
+        uint32_t v = sum(4,5);
+    }
+
+
 License
 =======
 The kw library is released under the BSD license see the LICENSE.rst file.
