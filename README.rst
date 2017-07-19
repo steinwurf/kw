@@ -19,7 +19,7 @@ multiple definitions error. To avoid this declare the parameters as const
 to give them internal linkage. Or alternatively define them in a ``cpp``
 file.
 
-Let's create a 2D box class::
+Let's create a 2D point class::
 
     #include <kw/arg.hpp>
 
