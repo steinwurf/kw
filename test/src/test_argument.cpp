@@ -11,8 +11,7 @@
 
 TEST(test_argument, test)
 {
-    kw::argument<uint32_t> param;
-    param = {(const void*)0xdeadbeef, 42U};
+    kw::argument<uint32_t> param((const void*)0xdeadbeef, 42U);
 
     EXPECT_EQ((const void*)0xdeadbeef, std::get<0>(param));
     EXPECT_EQ(42U, std::get<1>(param));
