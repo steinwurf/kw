@@ -93,6 +93,7 @@ TEST(test_arg, get_const_reference)
 {
     const kw::parameter<const uint32_t&> alpha;
 
-    const uint32_t& value = kw::get(alpha, alpha=50U);
-    EXPECT_EQ(value, 50U);
+    uint32_t number = 5;
+    const uint32_t& value = kw::get(alpha, alpha=number);
+    EXPECT_EQ(value, number);
 }

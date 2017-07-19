@@ -15,7 +15,8 @@ find a subset of these `here <http://en.wikipedia.org/wiki/Named_parameter>`_.
 
 To use kw you must define each of you parameter names as global objects.
 If you define these in a header file, chances are that you will get a
-multiple definitions error. One way to fix this is to define them in a ``cpp``
+multiple definitions error. To avoid this declare the parameters as const
+to give them internal linkage. Or alternatively define them in a ``cpp``
 file.
 
 Let's create a 2D box class::
@@ -115,4 +116,11 @@ The kw library is released under the BSD license see the LICENSE.rst file.
 Credit
 ======
 When designing kw we used the following project as a starting point:
-`CaptainCrowbar/kwargs <https://github.com/CaptainCrowbar/kwargs>`_.
+`CaptainCrowbar/kwargs <https://github.com/CaptainCrowbar/kwargs>`_. This
+was later removed. But the code still exist in a different repository:
+https://goo.gl/nA1NqY
+
+Related work
+============
+Later on we also discovered other related works:
+- https://github.com/cheshirekow/kwargs
