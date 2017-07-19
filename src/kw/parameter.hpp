@@ -18,9 +18,9 @@ struct parameter
     { }
 
     template<class Arg>
-    argument<Value> operator=(Arg&& argument) const
+    argument<Value> operator=(Arg&& arg) const
     {
-        return {this, std::forward<Arg>(argument)};
+        return argument<Value>(this, std::forward<Arg>(arg));
     }
 };
 }
