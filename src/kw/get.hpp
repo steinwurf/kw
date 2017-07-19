@@ -63,13 +63,33 @@ namespace detail
         }
     };
 
+    /// The following was added to support const reference parameters.
+    /// There is a problem with const references which can cause dangling
+    /// references.
+    /// The test in test_get.cpp called TEST(test_arg, get_const_reference)
+    /// would expose this problem if not handled. So what we do here is
+    /// that if the Value is a const reference we return it by value.
+    ///
+    /// Read more about the problem here:
+    /// https://stackoverflow.com/a/667415
+    template<class Value>
+    struct return_type
+    {
+        using type = Value;
+    };
+
+    template<class Value>
+    struct return_type<const Value&>
+    {
+        using type = std::remove_reference_t<Value>;
+    };
 }
 
 /// Find and return the value of the parameter. If the parameter cannot
 /// be found we assert!
 ///
 template<class Value, class... Arguments>
-Value get(
+typename detail::return_type<Value>::type get(
     const parameter<Value>& param,
     const Arguments&... args)
 {
