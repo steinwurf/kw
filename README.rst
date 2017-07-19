@@ -19,65 +19,107 @@ multiple definitions error. To avoid this declare the parameters as const
 to give them internal linkage. Or alternatively define them in a ``cpp``
 file.
 
+Optional arguments
+------------------
+
 Let's create a 2D point class::
 
-    #include <kw/arg.hpp>
+    const kw::parameter<uint32_t> x;
+    const kw::parameter<uint32_t> y;
+    const kw::parameter<std::string> name;
 
-    #include <string>
-    #include <cstdint>
-    #include <iostream>
-
-    kw::arg<uint32_t> x, y, width, height;
-    kw::arg<std::string> name;
-
-    class box
+    class point
     {
-
     public:
 
         template<class... Args>
-        box(const Args&... args)
+        point(const Args&... args)
         {
-            // extract values
+            // Extract optional values
             kw::get(name, m_name, args...);
             kw::get(x, m_x, args...);
             kw::get(y, m_y, args...);
-            kw::get(width, m_width, args...);
-            kw::get(height, m_height, args...);
         }
 
-        void print()
+        std::string to_string()
         {
-            std::cout << "name:   " << m_name << std::endl;
-            std::cout << "x:      " << m_x << std::endl;
-            std::cout << "y:      " << m_y << std::endl;
-            std::cout << "width:  " << m_width << std::endl;
-            std::cout << "height: " << m_height << std::endl;
+            std::stringstream ss;
+            ss << "m_name=" << m_name << ", ";
+            ss << "m_x=" << m_x << ", ";
+            ss << "m_y=" << m_y;
+            return ss.str();
         }
 
     private:
 
-        std::string m_name = "box";
+        std::string m_name = "point";
         uint32_t m_x = 0;
         uint32_t m_y = 0;
-        uint32_t m_width = 10;
-        uint32_t m_height = 10;
     };
 
-We can now create a box by specifying all the values::
+We can now create a point by specifying all the values::
 
-    auto my_box = box(x=10, y=20, width=44, height=87, name="cool box");
+    point p = point(x=10, y=20, name="cool point");
+
+    std::string out = p.to_string();
+    assert(out == "m_name=cool point, m_x=10, m_y=20");
+
+We can also create a point while only specifying a subset of the values,
+e.g. the name::
+
+    point p = point(y=20);
+
+    std::string out = p.to_string();
+    assert(out == "m_name=point, m_x=0, m_y=20");
 
 And we can create a box by specifying none of the values::
 
-    auto my_other_box = box();
+    point p = point();
 
-Finally we can also create a box while only specifying a subset of the values,
-e.g. the name::
+    std::string out = p.to_string();
+    assert(out == "m_name=point, m_x=0, m_y=0");
 
-    auto my_named_box = box(name="almost a standard box");
+Checking whether an optional argument was specified
+----------------------------------------------------
 
-You can find this example in the examples folder.
+If needed it is also possible to check whether an argument was specified.
+The optional version of the get function returns a bool indicating whether
+the argument was found::
+
+    const kw::parameter<double> temperature;
+
+    class thermometer
+    {
+    public:
+
+        template<class... Args>
+        thermometer(const Args&... args)
+        {
+            bool found = kw::get(temperature, m_temperature, args...);
+            assert(found);
+        }
+
+        double temp() const
+        {
+            return m_temperature;
+        }
+
+    private:
+
+        double m_temperature = 0;
+    };
+
+In this case the code will assert if ``temperature`` is not passed as an
+argument::
+
+    thermometer t = thermometer(temperature=10.0);
+    assert(t.temp() == 10.0);
+
+Non-optional arguments
+----------------------
+
+If certain arguments are required a ...
+
 
 Notes
 =====
