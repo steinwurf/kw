@@ -9,8 +9,6 @@
 #include <cstdint>
 #include <iostream>
 
-#include <prettyprint.hpp>
-
 namespace
 {
 const kw::parameter<uint32_t&> counter;
@@ -71,8 +69,7 @@ private:
 int main()
 {
     uint32_t count = 0;
-
-
+    
     //We can now create a box by specifying all the values
     box my_box = box(x=10U, y=20U, width=44U, height=87U, name="cool box",
         counter=count);
@@ -91,7 +88,4 @@ int main()
     auto my_named_box = box(counter=count, name="almost a standard box");
     std::cout << "printing my_named_box:" << std::endl;
     my_named_box.print();
-
-
-
 }
