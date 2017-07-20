@@ -64,27 +64,24 @@ namespace detail
     };
 }
 
-/// Find and return the value of the parameter. If the parameter cannot
-/// be found we assert!
+/// @brief Try to find an argument matching the parameter. If an argument
+///        is found we copy it to the passed reference and return true.
+///        Otherwise we just return false.
 ///
-template<class Value, class... Arguments>
-Value get(
-    const parameter<Value>& param,
-    const Arguments&... args)
-{
-    const argument<Value>* ptr =
-        detail::find_parameter<Value>::get(param, args...);
-
-    assert(ptr != nullptr && "An argument for a required parameter "
-        "was not passed.");
-
-    return std::get<1>(*ptr);
-}
-
-/// Try to find an argument matching the parameter. If an argument is
-/// found we copy it to the passed reference and return true. Otherwise we
-/// just return false.
+/// @tparam Value This is the value type of the parameter e.g. for
+///         kw::parameter<uint32_t> uint32_t would be the Value.
 ///
+/// @tparam Arguments This is a variadic template pack of arguments.
+///
+/// @param param The parameter instance that we are looking for.
+///
+/// @param value Reference to the value where the found argument matching
+///        the parameter should be stored.
+///
+/// @param args Variadic template parameter pack, containing all the
+///        arguments passed.
+///
+/// @return Treu if an arguement is found. Otherwise false.
 template<class Value, class... Arguments>
 bool get(
     const parameter<Value>& param,
@@ -104,5 +101,39 @@ bool get(
         return false;
     }
 }
+
+/// Find and return the value of the parameter. If the parameter cannot
+/// be found we assert!
+///
+/// @brief Try to find an argument matching the parameter. If an argument
+///        cannot be found we assert. Otherwise we return the found
+///        argument.
+///
+/// @tparam Value This is the value type of the parameter e.g. for
+///         kw::parameter<uint32_t> uint32_t would be the Value.
+///
+/// @tparam Arguments This is a variadic template pack of arguments.
+///
+/// @param param The parameter instance that we are looking for.
+///
+/// @param args Variadic template parameter pack, containing all the
+///        arguments passed.
+///
+/// @return Treu if an arguement is found. Otherwise false.
+
+template<class Value, class... Arguments>
+Value get(
+    const parameter<Value>& param,
+    const Arguments&... args)
+{
+    const argument<Value>* ptr =
+        detail::find_parameter<Value>::get(param, args...);
+
+    assert(ptr != nullptr && "An argument for a required parameter "
+        "was not passed.");
+
+    return std::get<1>(*ptr);
+}
+
 
 }

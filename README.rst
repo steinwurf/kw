@@ -19,11 +19,63 @@ multiple definitions error. To avoid this declare the parameters as const
 to give them internal linkage. Or alternatively define them in a ``cpp``
 file.
 
-Optional arguments
-------------------
+Using keyword parameters
+------------------------
+
+There are two functions available when utilizing keyword parameters in
+your application. A short description and signature is show here for
+reference. Following this section you can find a few examples of how to use
+both.
+
+Using optional arguments::
+
+    // Define some parameters
+    const kw::parameter<uint32_t> x_param;
+    const kw::parameter<uint32_t> y_param;
+
+    // Define a value to capture the argument
+    uint32_t x_value;
+
+    // Found will be true of false depending on whether x_param was passed
+    bool found = kw::get(x_param, x_value, x_param=10, y_param=10);
+    //     +                +        +         +          +
+    //     |                |        |         |          |
+    //     |                |        |         v          v
+    //     |                |        |         Any number of parameter
+    //     |                |        |         arguments
+    //     |                |        |
+    //     |                |        +----> Where to store the found value
+    //     |                |
+    //     |                +----> Parameter we are looking for
+    //     |
+    //     +----> Boolean indicating whether argument was found
+
+
+Using non-optional arguments::
+
+    // Define some parameters
+    const kw::parameter<uint32_t> x_param;
+    const kw::parameter<uint32_t> y_param;
+
+    // Define a value to capture the argument (must be found)
+    uint32_t x_value = kw::get(x_param, x_param=10, y_param=10);
+    //         +                +            +          +
+    //         |                |            |          |
+    //         |                |            v          v
+    //         |                |            Any number of parameter
+    //         |                |            arguments
+    //         |                |
+    //         |                +----> Parameter we are looking for
+    //         |
+    //         +----> Where to store the found value
+
+
+Larger example of optional arguments
+------------------------------------
 
 Let's create a 2D point class::
 
+    const kw::parameter<uint32_t&> count;
     const kw::parameter<uint32_t> x;
     const kw::parameter<uint32_t> y;
     const kw::parameter<std::string> name;
@@ -33,12 +85,20 @@ Let's create a 2D point class::
     public:
 
         template<class... Args>
-        point(const Args&... args)
+        point(const Args&... args) : m_count(kw::get(count, args...))
         {
+            // Increment the count
+            ++m_count;
+
             // Extract optional values
-            kw::get(name, m_name, args...);
-            kw::get(x, m_x, args...);
-            kw::get(y, m_y, args...);
+            m_name_default = kw::get(name, m_name, args...);
+            m_x_default = kw::get(x, m_x, args...);
+            m_y_default = kw::get(y, m_y, args...);
+        }
+
+        ~point()
+        {
+            --m_count;
         }
 
         std::string to_string()
@@ -52,79 +112,47 @@ Let's create a 2D point class::
 
     private:
 
+        uint32_t& m_count;
         std::string m_name = "point";
         uint32_t m_x = 0;
         uint32_t m_y = 0;
+        bool m_name_default = false;
+        bool m_x_default = false;
+        bool m_y_default = false;
     };
 
 We can now create a point by specifying all the values::
 
-    point p = point(x=10, y=20, name="cool point");
+    uint32_t counter = 0U;
+    {
+        // Create a scope to see the counter update
+        point p = point(count=counter, x=10U, y=20U, name="cool point");
+        assert(counter == 1U);
 
-    std::string out = p.to_string();
-    assert(out == "m_name=cool point, m_x=10, m_y=20");
+        std::string out = p.to_string();
+        assert(out == "m_name=cool point, m_x=10, m_y=20");
+    }
+
+    // The counter is now adjusted as the point goes out of scope
+    assert(counter == 0U);
 
 We can also create a point while only specifying a subset of the values,
 e.g. the name::
 
-    point p = point(y=20);
+    uint32_t counter = 0U;
+    point p = point(y=20, count=counter);
 
     std::string out = p.to_string();
     assert(out == "m_name=point, m_x=0, m_y=20");
 
-And we can create a box by specifying none of the values::
+And we can create a point specifying only the non-optional of the values::
 
-    point p = point();
+    uint32_t counter = 0U;
+    point p = point(count=counter);
 
     std::string out = p.to_string();
     assert(out == "m_name=point, m_x=0, m_y=0");
 
-Checking whether an optional argument was specified
-----------------------------------------------------
-
-If needed it is also possible to check whether an argument was specified.
-The optional version of the get function returns a bool indicating whether
-the argument was found::
-
-    const kw::parameter<double> temperature;
-
-    class thermometer
-    {
-    public:
-
-        template<class... Args>
-        thermometer(const Args&... args)
-        {
-            bool found = kw::get(temperature, m_temperature, args...);
-            assert(found);
-        }
-
-        double temp() const
-        {
-            return m_temperature;
-        }
-
-    private:
-
-        double m_temperature = 0;
-    };
-
-In this case the code will assert if ``temperature`` is not passed as an
-argument::
-
-    thermometer t = thermometer(temperature=10.0);
-    assert(t.temp() == 10.0);
-
-Non-optional arguments
-----------------------
-
-If certain arguments are required a ...
-
-
-Notes
-=====
-We need the parameters to have the same address:
-https://stackoverflow.com/a/27349508
 
 Terminology
 ===========
