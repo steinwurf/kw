@@ -69,10 +69,10 @@ private:
 int main()
 {
     uint32_t count = 0;
-    
+
     //We can now create a box by specifying all the values
     box my_box = box(x=10U, y=20U, width=44U, height=87U, name="cool box",
-        counter=count);
+                     counter=count);
 
     std::cout << "printing my_box:" << std::endl;
     my_box.print();

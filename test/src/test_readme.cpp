@@ -14,51 +14,52 @@
 
 namespace
 {
-    const kw::parameter<uint32_t&> count;
-    const kw::parameter<uint32_t> x;
-    const kw::parameter<uint32_t> y;
-    const kw::parameter<std::string> name;
+const kw::parameter<uint32_t&> count;
+const kw::parameter<uint32_t> x;
+const kw::parameter<uint32_t> y;
+const kw::parameter<std::string> name;
 
-    class point
+class point
+{
+public:
+
+    template<class... Args>
+    point(const Args&... args) :
+        m_count(kw::get(count, args...))
     {
-    public:
+        // Increment the count
+        ++m_count;
 
-        template<class... Args>
-        point(const Args&... args) : m_count(kw::get(count, args...))
-        {
-            // Increment the count
-            ++m_count;
+        // Extract optional values
+        m_name_default = kw::get(name, m_name, args...);
+        m_x_default = kw::get(x, m_x, args...);
+        m_y_default = kw::get(y, m_y, args...);
+    }
 
-            // Extract optional values
-            m_name_default = kw::get(name, m_name, args...);
-            m_x_default = kw::get(x, m_x, args...);
-            m_y_default = kw::get(y, m_y, args...);
-        }
+    ~point()
+    {
+        --m_count;
+    }
 
-        ~point()
-        {
-            --m_count;
-        }
+    std::string to_string()
+    {
+        std::stringstream ss;
+        ss << "m_name=" << m_name << ", ";
+        ss << "m_x=" << m_x << ", ";
+        ss << "m_y=" << m_y;
+        return ss.str();
+    }
 
-        std::string to_string()
-        {
-            std::stringstream ss;
-            ss << "m_name=" << m_name << ", ";
-            ss << "m_x=" << m_x << ", ";
-            ss << "m_y=" << m_y;
-            return ss.str();
-        }
+private:
 
-    private:
-
-        uint32_t& m_count;
-        std::string m_name = "point";
-        uint32_t m_x = 0;
-        uint32_t m_y = 0;
-        bool m_name_default = false;
-        bool m_x_default = false;
-        bool m_y_default = false;
-    };
+    uint32_t& m_count;
+    std::string m_name = "point";
+    uint32_t m_x = 0;
+    uint32_t m_y = 0;
+    bool m_name_default = false;
+    bool m_x_default = false;
+    bool m_y_default = false;
+};
 
 }
 

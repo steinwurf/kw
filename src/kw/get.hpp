@@ -17,51 +17,51 @@ namespace kw
 
 namespace detail
 {
-    /// Small helper for finding the arguments matching a parameter in
-    /// the variadic template pack.
-    template<class Value>
-    struct find_parameter
+/// Small helper for finding the arguments matching a parameter in
+/// the variadic template pack.
+template<class Value>
+struct find_parameter
+{
+
+    /// Overload for get when no more arguments are available.
+    static const argument<Value>* get(const parameter<Value>& param)
+    {
+        (void) param;
+        return nullptr;
+    }
+
+    /// Overload of the get(...) function where the template parameter
+    /// SomeValue != Value. This means that an argument does not
+    /// have the value type we are looking for. So we do not need to
+    /// check the key, we just check the next argument.
+    template<class SomeValue, class... Arguments>
+    static const argument<Value>* get(
+        const parameter<Value>& param,
+        const argument<SomeValue>& arg,
+        const Arguments&... args)
+    {
+        (void) arg;
+        return get(param, args...);
+    }
+
+    /// Overload of the get(...) function where the argument has the
+    /// rigth value type so we need to check the key. If the key
+    /// matches we return the argument.
+    template<class... Arguments>
+    static const argument<Value>* get(
+        const parameter<Value>& param,
+        const argument<Value>& arg,
+        const Arguments&... args)
     {
 
-        /// Overload for get when no more arguments are available.
-        static const argument<Value>* get(const parameter<Value>& param)
+        if (&param == std::get<0>(arg))
         {
-            (void) param;
-            return nullptr;
+            return std::addressof(arg);
         }
 
-        /// Overload of the get(...) function where the template parameter
-        /// SomeValue != Value. This means that an argument does not
-        /// have the value type we are looking for. So we do not need to
-        /// check the key, we just check the next argument.
-        template<class SomeValue, class... Arguments>
-        static const argument<Value>* get(
-            const parameter<Value>& param,
-            const argument<SomeValue>& arg,
-            const Arguments&... args)
-        {
-            (void) arg;
-            return get(param, args...);
-        }
-
-        /// Overload of the get(...) function where the argument has the
-        /// rigth value type so we need to check the key. If the key
-        /// matches we return the argument.
-        template<class... Arguments>
-        static const argument<Value>* get(
-            const parameter<Value>& param,
-            const argument<Value>& arg,
-            const Arguments&... args)
-        {
-
-            if (&param == std::get<0>(arg))
-            {
-                return std::addressof(arg);
-            }
-
-            return get(param, args...);
-        }
-    };
+        return get(param, args...);
+    }
+};
 }
 
 /// @brief Try to find an argument matching the parameter. If an argument
@@ -130,7 +130,7 @@ Value get(
         detail::find_parameter<Value>::get(param, args...);
 
     assert(ptr != nullptr && "An argument for a required parameter "
-        "was not passed.");
+           "was not passed.");
 
     return std::get<1>(*ptr);
 }

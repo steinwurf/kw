@@ -46,8 +46,8 @@ struct parameter<const Value&>
     {
         // We need to use decltype(arg) to see if arg is a r-value
         static_assert(!std::is_rvalue_reference<decltype(arg)>::value,
-            "No r-value can be passed to const & parameter without "
-            "creating dangling references.");
+                      "No r-value can be passed to const & parameter without "
+                      "creating dangling references.");
         return argument<const Value&>(this, std::forward<Arg>(arg));
     }
 };
