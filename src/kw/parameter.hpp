@@ -30,7 +30,7 @@ struct parameter
 /// references.
 /// The test in test_get.cpp called TEST(test_arg, get_const_reference)
 /// would expose this problem if not handled. So what we do here is
-/// to make sure that we do not all r-value arguments to bind to const
+/// to make sure that we do not allow r-value arguments to bind to const
 /// references.
 ///
 /// Read more about the problem here:
