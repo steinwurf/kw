@@ -10,7 +10,6 @@
 
 #include <type_traits>
 #include <cassert>
-#include <iostream> // @todo remove
 
 namespace kw
 {
