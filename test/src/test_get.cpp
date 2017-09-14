@@ -29,6 +29,13 @@ TEST(test_arg, no_arguments)
     EXPECT_FALSE(found);
 }
 
+TEST(test_arg, no_arguments_ignore_return_of_optional_get)
+{
+    uint32_t found_alpha = 0U;
+    kw::get(alpha, found_alpha, bravo=true, charlie="ch");
+    EXPECT_EQ(found_alpha, 0U);
+}
+
 TEST(test_arg, all_arguments)
 {
     uint32_t a;

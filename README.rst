@@ -85,15 +85,16 @@ Let's create a 2D point class::
     public:
 
         template<class... Args>
-        point(const Args&... args) : m_count(kw::get(count, args...))
+        point(const Args&... args) :
+            m_count(kw::get(count, args...))
         {
             // Increment the count
             ++m_count;
 
             // Extract optional values
-            m_name_default = kw::get(name, m_name, args...);
-            m_x_default = kw::get(x, m_x, args...);
-            m_y_default = kw::get(y, m_y, args...);
+            kw::get(name, m_name, args...);
+            kw::get(x, m_x, args...);
+            kw::get(y, m_y, args...);
         }
 
         ~point()
@@ -116,9 +117,6 @@ Let's create a 2D point class::
         std::string m_name = "point";
         uint32_t m_x = 0;
         uint32_t m_y = 0;
-        bool m_name_default = false;
-        bool m_x_default = false;
-        bool m_y_default = false;
     };
 
 We can now create a point by specifying all the values::
@@ -152,6 +150,53 @@ And we can create a point specifying only the non-optional of the values::
 
     std::string out = p.to_string();
     assert(out == "m_name=point, m_x=0, m_y=0");
+
+Checking optional arguments
+---------------------------
+
+Lets look at a simple example where we check whether an optional argument
+was found - and based on the result perform some action::
+
+    const kw::parameter<std::string> configuration;
+
+    inline std::string load_from_file()
+    {
+        // Just to illustrate the possibility - imagine that we now loaded
+        // a configuration from a file :)
+        //
+        // Also probably not a good idea to do this kind of stuff in a
+        // constructor - but anyways for the sake of the example...
+        return "I just loaded this - promise :)";
+    }
+
+    struct server
+    {
+        template<class... Args>
+        server(const Args&... args)
+        {
+            // Extract optional values
+            if(!kw::get(configuration, m_configuration, args...))
+            {
+                m_configuration = load_from_file();
+            }
+        }
+
+        std::string m_configuration;
+    };
+
+If the optional argument ``configuration`` is not found the
+``load_from_file(...)`` function is invoked::
+
+    server s = server();
+
+    assert(s.m_configuration == "I just loaded this - promise :)");
+
+If the optional argument is specified it is used instead::
+
+    server s = server(configuration="Please use this configuration");
+
+    assert(s.m_configuration == "Please use this configuration");
+
 
 
 Terminology
