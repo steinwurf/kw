@@ -114,7 +114,7 @@ struct server
     server(const Args&... args)
     {
         // Extract optional values
-        if(!kw::get(configuration, m_configuration, args...))
+        if (!kw::get(configuration, m_configuration, args...))
         {
             m_configuration = load_from_file();
         }
