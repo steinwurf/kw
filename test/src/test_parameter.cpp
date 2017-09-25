@@ -5,14 +5,22 @@
 
 #include <kw/parameter.hpp>
 
+#include <string>
 #include <cstdint>
+#include <tuple>
 
 #include <gtest/gtest.h>
 
-TEST(test_parameter, test)
-{
-    kw::parameter<uint32_t> param;
-    param.value = 42U;
+#include "test_parameters.hpp"
 
-    EXPECT_EQ(42U, param.value);
+namespace
+{
+
+const kw::parameter<uint32_t> alpha;
+const kw::parameter<bool> bravo;
+const kw::parameter<std::string> charlie;
+}
+
+TEST(test_arg, convert)
+{
 }

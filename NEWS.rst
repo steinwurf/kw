@@ -6,7 +6,8 @@ every change, see the Git log.
 
 Latest
 ------
-* tbd
+* Major: Added support for references.
+* Major: Added support for optional and non-optional arguments.
 
 3.0.0
 -----
